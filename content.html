@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<div id="graphsCont">
+
+<h2 style="text-align: center">Select Domain</h2>
+
+<div align="center">
+    <div class="btn-group">
+        <button id="btn-police" type="button" data-target="policecontainer" name="toggler" class="btn btn-primary ">Police</button>
+        <button id="btn-stuff" data-target="stuffcontainer" name="toggler" class="btn btn-primary">Stuff</button>
+        <button id="btn-fairfax" data-target="fairfaxcontainer" name="toggler" class="btn btn-primary">Fairfax</button>
+        <button id="btn-rbnz" data-target="rbnzcontainer" name="toggler" class="btn btn-primary">RBNZ</button>
+    </div>
+</div>
+
+<ul style="list-style-type: none; position: absolute" class="contextmenu">
+    <li id="words" data-action="words">See Top Words</li>
+    <li id="visit" data-action="visit">Visit Website</li>
+    <li id="prop" data-action="prop">Graph Properties</li>
+</ul>
+
+<div id="policecontainer" class="dataset"></div>
+<div id="stuffcontainer" class="dataset"></div>
+<div id="fairfaxcontainer" class="dataset"></div>
+<div id="rbnzcontainer" class="dataset"></div>
+
+<div id="ajaxDiv">
+    <p></p>
+</div>
+
+<div id="stuffModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Police Graph Info</h4>
+            </div>
+            <div class="modal-body">
+                <table style="width: 100%" class="table table-bordered">
+                    <thread>
+                        <tr>
+                            <th>Starting Point</th>
+                            <th>Total Node Count</th>
+                            <th>Node Size Definition</th>
+                            <th>Node Color Definition</th>
+                            <th>Highest Page Rank</th>
+                        </tr>
+                    </thread>
+                    <tbody>
+                    <tr>
+                        <th><a href="http://www.police.govt.nz/">Police.govt.nz</a></th>
+                        <td>Hello</td>
+                        <td>World</td>
+                        <td>Modularity</td>
+                        <th><a href="https://www.govt.nz/">NZ.govt.nz</a></th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div id="policeinfo" class="info">
+    <ul class="list-group" style="width:auto">
+        <li class="list-group-item list-group-item-info"><b>Starting Point: </b><a href="http://www.police.govt.nz/">Police.govt.nz</a></li>
+        <li class="list-group-item list-group-item-info"><b>Total Node Count: </b><a href="#"> 10,671</a></li>
+        <li class="list-group-item list-group-item-info"><b>Node Size Definition: </b> <a href="#" data-toggle="modal" data-target="#pgrank">Page Rank</a></li>
+        <li class="list-group-item list-group-item-info"><b>Node Color Definition:</b> <a href="#" data-toggle="modal" data-target="#modularity"> Modularity</a></li>
+        <li class="list-group-item list-group-item-info"><b>Highest Page Rank:</b> <a href="https://www.govt.nz/">NZ.govt.nz</a></li>
+    </ul>
+</div>
+
+<div id="stuffinfo" class="info">
+    <ul class="list-group"  style="width:auto">
+        <li class="list-group-item list-group-item-info"><b>Starting Point: </b><a href="http://www.stuff.co.nz/">Stuff.co.nz</a></li>
+        <li class="list-group-item list-group-item-info"><b>Total Node Count: </b><a href="#"> 207</a></li>
+        <li class="list-group-item list-group-item-info"><b>Node Size Definition: </b> <a href="#" data-toggle="modal" data-target="#pgrank">Page Rank</a></li>
+        <li class="list-group-item list-group-item-info"><b>Node Color Definition:</b> <a href="#" data-toggle="modal" data-target="#modularity"> Modularity</a></li>
+        <li class="list-group-item list-group-item-info"><b>Highest Page Rank:</b> <a href="http://www.stuff.co.nz/">Stuff.co.nz</a></li>
+    </ul>
+</div>
+
+<div id="fairfaxinfo"  style="width:auto">
+    <ul class="list-group" style="width:auto">
+        <li class="list-group-item list-group-item-info"><b>Starting Point: </b><a href="http://www.fairfaxmedia.co.nz/">fairfaxmedia.co.nz</a></li>
+        <li class="list-group-item list-group-item-info"><b>Total Node Count: </b><a href="#"> 2,601</a></li>
+        <li class="list-group-item list-group-item-info"><b>Node Size Definition: </b> <a href="#" data-toggle="modal" data-target="#pgrank">Page Rank</a></li>
+        <li class="list-group-item list-group-item-info"><b>Node Color Definition:</b> <a href="#" data-toggle="modal" data-target="#modularity"> Modularity</a></li>
+        <li class="list-group-item list-group-item-info"><b>Highest Page Rank:</b> <a href="http://www.stuff.co.nz/">Stuff.co.nz</a></li>
+    </ul>
+</div>
+
+
+<div id="rbnzinfo" class="info">
+    <ul class="list-group"  style="width:auto">
+        <li class="list-group-item list-group-item-info"><b>Starting Point: </b><a href="http://www.rbnz.govt.nz/">Rbnz.govt.nz</a></li>
+        <li class="list-group-item list-group-item-info"><b>Total Node Count: </b><a href="#"> 7,539</a></li>
+        <li class="list-group-item list-group-item-info"><b>Node Size Definition: </b> <a href="#" data-toggle="modal" data-target="#pgrank">Page Rank</a></li>
+        <li class="list-group-item list-group-item-info"><b>Node Color Definition:</b> <a href="#" data-toggle="modal" data-target="#modularity"> Modularity</a></li>
+        <li class="list-group-item list-group-item-info"><b>Highest Page Rank:</b> <a href="https://www.govt.nz/">newzealand.govt.nz</a></li>
+    </ul>
+</div>
+
+<div id="trivagoinfo" class="info">
+    <ul class="list-group"  style="width:auto">
+        <li class="list-group-item list-group-item-info"><b>Starting Point: </b><a href="http://www.trivago.co.nz/">Trivago.co.nz</a></li>
+        <li class="list-group-item list-group-item-info"><b>Total Node Count: </b><a href="#">60</a></li>
+        <li class="list-group-item list-group-item-info"><b>Node Size Definition: </b> <a href="#" data-toggle="modal" data-target="#pgrank">Page Rank</a></li>
+        <li class="list-group-item list-group-item-info"><b>Node Color Definition:</b> <a href="#" data-toggle="modal" data-target="#modularity"> Modularity</a></li>
+        <li class="list-group-item list-group-item-info"><b>Highest Page Rank:</b> <a href="http://www.3news.co.nz/">3news.co.nz</a></li>
+    </ul>
+</div>
+
+<div id="retailinfo" class="info">
+    <ul class="list-group"  style="width:auto">
+        <li class="list-group-item list-group-item-info"><b>Starting Point: </b><a href="http://www.retail.org.nz/">Retail.org.nz</a></li>
+        <li class="list-group-item list-group-item-info"><b>Total Node Count: </b><a href="#">10,801</a></li>
+        <li class="list-group-item list-group-item-info"><b>Node Size Definition: </b> <a href="#" data-toggle="modal" data-target="#pgrank">Page Rank</a></li>
+        <li class="list-group-item list-group-item-info"><b>Node Color Definition:</b> <a href="#" data-toggle="modal" data-target="#modularity"> Modularity</a></li>
+        <li class="list-group-item list-group-item-info"><b>Highest Page Rank:</b> <a href="https://www.govt.nz/">newzealand.govt.nz</a></li>
+    </ul>
+</div>
+
+<div id="nzmilinfo" class="info">
+    <ul class="list-group"  style="width:auto">
+        <li class="list-group-item list-group-item-info"><b>Starting Point: </b><a href="http://www.nzdf.mil.nz/">NZDF.mil.nz</a></li>
+        <li class="list-group-item list-group-item-info"><b>Total Node Count: </b><a href="#">10,677</a></li>
+        <li class="list-group-item list-group-item-info"><b>Node Size Definition: </b> <a href="#" data-toggle="modal" data-target="#pgrank">Page Rank</a></li>
+        <li class="list-group-item list-group-item-info"><b>Node Color Definition:</b> <a href="#" data-toggle="modal" data-target="#modularity"> Modularity</a></li>
+        <li class="list-group-item list-group-item-info"><b>Highest Page Rank:</b> <a href="https://www.govt.nz/">newzealand.govt.nz</a></li>
+    </ul>
+</div>
+</body>
+</html>

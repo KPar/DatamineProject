@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NZ Internet Map</title>
+    <style>
+        #policecontainer, #stuffcontainer, #fairfaxcontainer, #rbnzcontainer, #trivagocontainer, #retailcontainer, #nzmilcontainer {
+            max-width: 80%;
+            height: 500px;
+            margin: auto;
+            background-color: #333333;
+
+        }
+
+        .contextmenu {
+            display: none;
+            z-index: 1000;
+            position: absolute;
+            overflow: hidden;
+            border: 1px solid #CCC;
+            white-space: nowrap;
+            font-family: sans-serif;
+            background: #FFF;
+            color: #333;
+            border-radius: 5px;
+        }
+
+        .contextmenu li {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .contextmenu li:hover {
+            background-color: #DEF;
+        }
+
+        body {
+            background-image: url("stardust.png");
+        }
+    </style>
+</head>
+<link rel="stylesheet" href="plugins/bootstrap-theme.css">
+<link rel="stylesheet" href="plugins/bootstrap.css">
+<link rel="stylesheet" href="plugins/bootstrap-theme.min.css">
+<link rel="stylesheet" href="plugins/bootstrap.min.css">
+<link rel="stylesheet" href="plugins/simple-sidebar.css">
+<body style=" max-width: 100%; max-height: 100%">
+
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <img src="2000px-Aut_logo_tran.svg.png"
+                 style="height: 100px; width: 200px; margin-left: auto; margin-right: auto; display: block">
+            <li class="sidebar-brand">
+                <a href="index2.html"><h1>Home</h1></a>
+            </li>
+            <li>
+                <a href="#" data-toggle="modal" data-target="#about">About</a>
+            </li>
+            <li>
+                <a href="#" data-toggle="modal" data-target="#topwords" onclick="getData('DBcon.php','ajaxDiv')">Top Words</a>
+            </li>
+            <li>
+                <a href="#" data-target="#polprop">Graph Properties</a>
+
+                <div id="prop">
+
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div id="target" class="container">
+        <h1 style="color: #337ab7">NZ Internet Map</h1>
+        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Menu</a>
+
+        <h2 style="text-align: center; color: #337ab7; text-decoration: underline"><span>Select Domain</span></h2>
+
+        <div align="center">
+            <div class="btn-group">
+                <button id="btn-police" data-target="policecontainer" name="toggler" class="btn btn-primary ">Police
+                </button>
+                <button id="btn-stuff" data-target="stuffcontainer" name="toggler" class="btn btn-primary">Stuff
+                </button>
+                <button id="btn-fairfax" data-target="fairfaxcontainer" name="toggler" class="btn btn-primary">Fairfax
+                </button>
+                <button id="btn-rbnz" data-target="rbnzcontainer" name="toggler" class="btn btn-primary">RBNZ</button>
+                <button id="btn-trivago" data-target="trivagocontainer" name="toggler" class="btn btn-primary">Trivago
+                </button>
+                <button id="btn-retail" data-target="retailcontainer" name="toggler" class="btn btn-primary">Retail
+                </button>
+                <button id="btn-nzmil" data-target="nzmilcontainer" name="toggler" class="btn btn-primary">NZ Mil
+                </button>
+            </div>
+        </div>
+
+        <div id="pgrank" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Page Rank</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Refers to the amount of incoming and outgoing links within a website.
+                            The more incoming and outgoing links, the higher the page rank.
+                            The higher the page rank, the larger the node.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modularity" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Modularity</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Refers to the connection between the nodes. The closer the node, the stronger the link
+                            connection.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="topwords" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Top Words</h4>
+                    </div>
+                    <div class="modal-body" id="ajaxDiv">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="about" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">About</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h2>The NZ Internet Map</h2>
+
+                        <p>The NZ Internet map is a bi-dimensional presenatation of links between NZ owned websites.
+                            Every node represents a website and the size is determined by page rank.
+                            The higher the page rank the larger the node.
+                            The closer the node the stronger the link of the two nodes.</p>
+
+                        <h2>Domains</h2>
+
+                        <p>The buttons represent a certain domain. Each domain will display thier respective graphs.
+                            The scrapped websites are as follows:</p>
+                        <ul>
+                            <li><a href="http://www.police.govt.nz/">Police.govt.nz</a></li>
+                            <li><a href="http://www.stuff.co.nz/">Stuff.co.nz</a></li>
+                            <li><a href="http://www.fairfaxmedia.co.nz/">fairfaxmedia.co.nz</a></li>
+                            <li><a href="http://www.rbnz.govt.nz/">Rbnz.govt.nz</a></li>
+                            <li><a href="http://www.trivago.co.nz/">Trivago.co.nz</a></li>
+                            <li><a href="http://www.retail.org.nz/">Retail.org.nz</a></li>
+                            <li><a href="http://www.nzdf.mil.nz/">NZDF.mil.nz</a></li>
+                        </ul>
+
+                        <h2>Scrape Process</h2>
+
+                        <p>Write something here Luke</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+
+        <div id="policecontainer" class="dataset"></div>
+        <div id="stuffcontainer" class="dataset"></div>
+        <div id="fairfaxcontainer" class="dataset"></div>
+        <div id="rbnzcontainer" class="dataset"></div>
+        <div id="trivagocontainer" class="dataset"></div>
+        <div id="retailcontainer" class="dataset"></div>
+        <div id="nzmilcontainer" class="dataset"></div>
+
+
+
+    </div>
+
+</div>
+
+
+<script src="plugins/sigma.min.js"></script>
+<script src="plugins/sigma.parsers.json.min.js"></script>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="plugins/bootstrap.js"></script>
+<script src="ajax.js"></script>
+<script src="xhr.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $("#about").modal('show');
+    });
+
+    $(document).ready(function () {
+        $('.dataset').show();
+        $('.btn-group button').click(function () {
+            var target = "#" + $(this).data("target");
+            $(".dataset").not(target).hide();
+            $(target).show();
+        });
+    });
+
+    $(document).ready(function () {
+        $("#btn-police").click(function () {
+            $('#prop').load("content.html #policeinfo ").show();
+        });
+    });
+
+    $(document).ready(function () {
+        $("#btn-stuff").click(function () {
+            $('#prop').load("content.html #stuffinfo ").show();
+        });
+    });
+
+
+    $(document).ready(function () {
+        $("#btn-fairfax").click(function () {
+            $('#prop').load("content.html #fairfaxinfo ").show();
+        });
+    });
+
+    $(document).ready(function () {
+        $("#btn-rbnz").click(function () {
+            $('#prop').load("content.html #rbnzinfo").show();
+        });
+    });
+
+    $(document).ready(function () {
+        $("#btn-trivago").click(function () {
+            $('#prop').load("content.html #trivagoinfo").show();
+        });
+    });
+
+    $(document).ready(function () {
+        $("#btn-retail").click(function () {
+            $('#prop').load("content.html #retailinfo").show();
+        });
+    });
+
+    $(document).ready(function () {
+        $("#btn-nzmil").click(function () {
+            $('#prop').load("content.html #nzmilinfo").show();
+        });
+    });
+
+
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+
+
+    function createRequest() {
+        var xhr = false;
+        if (window.XMLHttpRequest) {
+            xhr = new XMLHttpRequest();
+        }
+        else if (window.ActiveXObject) {
+            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        return xhr;
+    } // end function createRequest()
+
+
+    var xhr = createRequest();
+
+    function getData(dataSource, divID) {
+        if (xhr) {
+            var place = document.getElementById(divID);
+            xhr.open("GET", "DBcon.php", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    place.innerHTML = xhr.responseText;
+                } // end if
+            } // end anonymous call-back function
+            xhr.send(null);
+        } // end if
+    } // end function getData()
+
+
+    sigma.classes.graph.addMethod('neighbors', function (nodeId) {
+
+        var k,
+                neighbors = {},
+                index = this.allNeighborsIndex[nodeId] || {};
+
+        for (k in index)
+            neighbors[k] = this.nodesIndex[k];
+
+        return neighbors;
+    });
+
+
+    var police = sigma.parsers.json('json/police_stripped.json', {
+                container: 'policecontainer',
+                settings: {
+                    defaultNodeColor: '#ec5148',
+                    maxNodeSize: 20,
+                    drawEdges: false,
+                    labelSize: 'proportional',
+                    defaultLabelColor: "white",
+                    drawLabels: true
+                }
+            },
+
+            function (s) {
+                // This function will be executed when the
+                // graph is displayed, with "s" the related
+                s.graph.nodes().forEach(function (n) {
+                    n.originalColor = n.color;
+                });
+                s.graph.edges().forEach(function (e) {
+                    e.originalColor = e.color;
+                });
+
+
+                // When a node is clicked, we check for each node
+                // if it is a neighbor of the clicked one. If not,
+                // we set its color as grey, and else, it takes its
+                // original color.
+                // We do the same for the edges, and we only keep
+                // edges that have both extremities colored.
+
+                s.bind('clickNode', function (e) {
+
+                    var url = e.data.node.id;
+                    window.location.href = 'http://' + url, '_blank';
+
+                    // Since the data has been modified, we need to
+                    // call the refresh method to make the colors
+                    // update effective.
+                    s.refresh();
+                });
+
+
+                // When the stage is clicked, we just color each
+                // node and edge with its original color.
+                s.bind('clickStage', function (e) {
+                    s.graph.nodes().forEach(function (n) {
+                        n.color = n.originalColor;
+                    });
+
+                    s.graph.edges().forEach(function (e) {
+                        e.color = e.originalColor;
+                    });
+
+                    // Same as in the previous event:
+                    s.refresh();
+                });
+
+            }
+    );
+
+    var x = sigma.parsers.json('json/stuff5.json', {
+                container: 'stuffcontainer',
+                settings: {
+                    defaultNodeColor: '#ec5148',
+                    maxNodeSize: 20,
+                    minNodeSize: 1,
+                    drawEdges: false,
+                    labelSize: "proportional",
+                    defaultLabelColor: "white",
+                    drawLabels: true
+                }
+            },
+
+
+            function (s) {
+                // This function will be executed when the
+                // graph is displayed, with "s" the related
+                s.graph.nodes().forEach(function (n) {
+                    n.originalColor = n.color;
+                });
+                s.graph.edges().forEach(function (e) {
+                    e.originalColor = e.color;
+                });
+
+
+                // When a node is clicked, we check for each node
+                // if it is a neighbor of the clicked one. If not,
+                // we set its color as grey, and else, it takes its
+                // original color.
+                // We do the same for the edges, and we only keep
+                // edges that have both extremities colored.
+                s.bind('clickNode', function (e) {
+                    var url = e.data.node.id;
+                    window.location.href = 'http://' + url, '_blank';
+
+                    // Since the data has been modified, we need to
+                    // call the refresh method to make the colors
+                    // update effective.
+                    s.refresh();
+                });
+
+
+                // When the stage is clicked, we just color each
+                // node and edge with its original color.
+                s.bind('clickStage', function (e) {
+                    s.graph.nodes().forEach(function (n) {
+                        n.color = n.originalColor;
+                    });
+
+                    s.graph.edges().forEach(function (e) {
+                        e.color = e.originalColor;
+                    });
+
+
+                    // Same as in the previous event:
+                    s.refresh();
+                });
+
+            }
+    );
+
+    sigma.parsers.json('json/fairfax.json', {
+                container: 'fairfaxcontainer',
+                settings: {
+                    defaultNodeColor: '#ec5148',
+                    maxNodeSize: 20,
+                    drawEdges: false,
+                    labelSize: 'proportional',
+                    defaultLabelColor: "white"
+                }
+            },
+
+
+            function (s) {
+                // This function will be executed when the
+                // graph is displayed, with "s" the related
+                s.graph.nodes().forEach(function (n) {
+                    n.originalColor = n.color;
+                });
+                s.graph.edges().forEach(function (e) {
+                    e.originalColor = e.color;
+                });
+
+
+                // When a node is clicked, we check for each node
+                // if it is a neighbor of the clicked one. If not,
+                // we set its color as grey, and else, it takes its
+                // original color.
+                // We do the same for the edges, and we only keep
+                // edges that have both extremities colored.
+                s.bind('clickNode', function (e) {
+
+                    var url = e.data.node.id;
+                    window.location.href = 'http://' + url, '_blank';
+
+                    // Since the data has been modified, we need to
+                    // call the refresh method to make the colors
+                    // update effective.
+                    s.refresh();
+
+                });
+
+                // When the stage is clicked, we just color each
+                // node and edge with its original color.
+                s.bind('clickStage', function (e) {
+                    s.graph.nodes().forEach(function (n) {
+                        n.color = n.originalColor;
+                    });
+
+                    s.graph.edges().forEach(function (e) {
+                        e.color = e.originalColor;
+                    });
+
+                    // Same as in the previous event:
+                    s.refresh();
+                });
+            }
+    );
+
+    sigma.parsers.json('json/rbnz2.json', {
+                container: 'rbnzcontainer',
+                settings: {
+                    defaultNodeColor: '#ec5148',
+                    minNodeSize: 1,
+                    maxNodeSize: 20,
+                    drawEdges: false,
+                    labelSize: 'proportional',
+                    defaultLabelColor: "white"
+                }
+            },
+
+
+            function (s) {
+                // This function will be executed when the
+                // graph is displayed, with "s" the related
+                s.graph.nodes().forEach(function (n) {
+                    n.originalColor = n.color;
+                });
+                s.graph.edges().forEach(function (e) {
+                    e.originalColor = e.color;
+                });
+
+
+                // When a node is clicked, we check for each node
+                // if it is a neighbor of the clicked one. If not,
+                // we set its color as grey, and else, it takes its
+                // original color.
+                // We do the same for the edges, and we only keep
+                // edges that have both extremities colored.
+                s.bind('clickNode', function (e) {
+
+                    var url = e.data.node.id;
+                    window.location.href = 'http://' + url, '_blank';
+
+                    // Since the data has been modified, we need to
+                    // call the refresh method to make the colors
+                    // update effective.
+                    s.refresh();
+
+                });
+
+
+                // When the stage is clicked, we just color each
+                // node and edge with its original color.
+                s.bind('clickStage', function (e) {
+                    s.graph.nodes().forEach(function (n) {
+                        n.color = n.originalColor;
+                    });
+
+                    s.graph.edges().forEach(function (e) {
+                        e.color = e.originalColor;
+                    });
+
+                    // Same as in the previous event:
+                    s.refresh();
+                });
+            }
+    );
+
+
+    sigma.parsers.json('json/trivago2.json', {
+                container: 'trivagocontainer',
+                settings: {
+                    defaultNodeColor: '#ec5148',
+                    minNodeSize: 5,
+                    maxNodeSize: 25,
+                    drawEdges: false,
+                    labelSize: 'proportional',
+                    defaultLabelColor: "white"
+                }
+            },
+
+
+            function (s) {
+                // This function will be executed when the
+                // graph is displayed, with "s" the related
+                s.graph.nodes().forEach(function (n) {
+                    n.originalColor = n.color;
+                });
+                s.graph.edges().forEach(function (e) {
+                    e.originalColor = e.color;
+                });
+
+
+                // When a node is clicked, we check for each node
+                // if it is a neighbor of the clicked one. If not,
+                // we set its color as grey, and else, it takes its
+                // original color.
+                // We do the same for the edges, and we only keep
+                // edges that have both extremities colored.
+                s.bind('clickNode', function (e) {
+
+                    var url = e.data.node.id;
+                    window.location.href = 'http://' + url, '_blank';
+
+                    // Since the data has been modified, we need to
+                    // call the refresh method to make the colors
+                    // update effective.
+                    s.refresh();
+                });
+
+
+                // When the stage is clicked, we just color each
+                // node and edge with its original color.
+                s.bind('clickStage', function (e) {
+                    s.graph.nodes().forEach(function (n) {
+                        n.color = n.originalColor;
+                    });
+
+                    s.graph.edges().forEach(function (e) {
+                        e.color = e.originalColor;
+                    });
+
+                    // Same as in the previous event:
+                    s.refresh();
+                });
+            }
+    );
+
+
+    sigma.parsers.json('json/retail.json', {
+                container: 'retailcontainer',
+                settings: {
+                    defaultNodeColor: '#ec5148',
+                    minNodeSize: 1,
+                    maxNodeSize: 20,
+                    drawEdges: false,
+                    labelSize: 'proportional',
+                    defaultLabelColor: "white"
+                }
+            },
+
+
+            function (s) {
+                // This function will be executed when the
+                // graph is displayed, with "s" the related
+                s.graph.nodes().forEach(function (n) {
+                    n.originalColor = n.color;
+                });
+                s.graph.edges().forEach(function (e) {
+                    e.originalColor = e.color;
+                });
+
+
+                // When a node is clicked, we check for each node
+                // if it is a neighbor of the clicked one. If not,
+                // we set its color as grey, and else, it takes its
+                // original color.
+                // We do the same for the edges, and we only keep
+                // edges that have both extremities colored.
+                s.bind('clickNode', function (e) {
+
+                    var url = e.data.node.id;
+                    window.location.href = 'http://' + url, '_blank';
+
+                    // Since the data has been modified, we need to
+                    // call the refresh method to make the colors
+                    // update effective.
+                    s.refresh();
+
+                });
+
+
+                // When the stage is clicked, we just color each
+                // node and edge with its original color.
+                s.bind('clickStage', function (e) {
+                    s.graph.nodes().forEach(function (n) {
+                        n.color = n.originalColor;
+                    });
+
+                    s.graph.edges().forEach(function (e) {
+                        e.color = e.originalColor;
+                    });
+
+                    // Same as in the previous event:
+                    s.refresh();
+                });
+            }
+    );
+
+    sigma.parsers.json('json/nzmil.json', {
+                container: 'nzmilcontainer',
+                settings: {
+                    defaultNodeColor: '#ec5148',
+                    minNodeSize: 1,
+                    maxNodeSize: 20,
+                    drawEdges: false,
+                    labelSize: 'proportional',
+                    defaultLabelColor: "white"
+                }
+            },
+
+
+            function (s) {
+                // This function will be executed when the
+                // graph is displayed, with "s" the related
+                s.graph.nodes().forEach(function (n) {
+                    n.originalColor = n.color;
+                });
+                s.graph.edges().forEach(function (e) {
+                    e.originalColor = e.color;
+                });
+
+
+                // When a node is clicked, we check for each node
+                // if it is a neighbor of the clicked one. If not,
+                // we set its color as grey, and else, it takes its
+                // original color.
+                // We do the same for the edges, and we only keep
+                // edges that have both extremities colored.
+                s.bind('clickNode', function (e) {
+
+                    var url = e.data.node.id;
+                    window.location.href = 'http://' + url, '_blank';
+
+                    // Since the data has been modified, we need to
+                    // call the refresh method to make the colors
+                    // update effective.
+                    s.refresh();
+                });
+
+
+                // When the stage is clicked, we just color each
+                // node and edge with its original color.
+                s.bind('clickStage', function (e) {
+                    s.graph.nodes().forEach(function (n) {
+                        n.color = n.originalColor;
+                    });
+
+                    s.graph.edges().forEach(function (e) {
+                        e.color = e.originalColor;
+                    });
+
+                    // Same as in the previous event:
+                    s.refresh();
+                });
+            }
+    );
+
+
+</script>
+
+</body>
+</html>
