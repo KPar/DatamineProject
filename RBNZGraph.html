@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The New Zealand Internet Map</title>
+    <style>
+        #rbnzcontainer{
+            max-width: 100%;
+            height: 900px;
+            margin: auto;
+            background-color: #333333;
+
+        }
+
+
+        body {
+            background-image: url("images/stardust.png");
+        }
+    </style>
+</head>
+
+<link rel="stylesheet" href="plugins/bootstrap-theme.css">
+<link rel="stylesheet" href="plugins/bootstrap.css">
+<link rel="stylesheet" href="plugins/bootstrap-theme.min.css">
+<link rel="stylesheet" href="plugins/bootstrap.min.css">
+<link rel="stylesheet" href="plugins/simple-sidebar.css">
+<link rel="stylesheet" href="plugins/whhg-font/css/whhg.css">
+<body style=" max-width: 100%; max-height: 100%">
+
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <img src="images/2015-10-29.png"
+                 style="height: 100px; width: 200px; margin-left: auto; margin-right: auto; display: block">
+            <li class="sidebar-brand">
+                <a href="index2.html"> <i class="icon-home" style="float: left;"></i>Home</a>
+            </li>
+            <li>
+                <a href="#" data-toggle="modal" data-target="#about"><i class="icon-info-sign" style="float: left"></i> About</a>
+            </li>
+            <li>
+                <a href="#" data-toggle="modal" data-target="#topwords"><i class="icon-numberlist" style="float: left"></i> Top Words</a>
+                <p id="words" class="list-group-item list-group-item-info">
+
+                </p>
+            </li>
+            <li>
+                <a href="#" data-toggle="collapse" data-target="#rbnzProp"><i class="icon-details" style="float: left"></i> Graph Properties</a>
+
+                <ul id="rbnzProp" class="list-group"  style="width:auto">
+                    <li class="list-group-item list-group-item-info"><b>Starting Point: </b><a href="http://www.rbnz.govt.nz/">Rbnz.govt.nz</a></li>
+                    <li class="list-group-item list-group-item-info"><b>Total Node Count: </b><a href="#"> 7,539</a></li>
+                    <li class="list-group-item list-group-item-info"><b>Node Size Definition: </b> <a href="#" data-toggle="modal" data-target="#pgrank">Page Rank</a></li>
+                    <li class="list-group-item list-group-item-info"><b>Node Color Definition:</b> <a href="#" data-toggle="modal" data-target="#modularity"> Modularity</a></li>
+                    <li class="list-group-item list-group-item-info"><b>Highest Page Rank:</b> <a href="https://www.govt.nz/">newzealand.govt.nz</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#" data-toggle="collapse" data-target="#graphinfo"><i class="icon-details" style="float: left"></i>Node Properties</a>
+                <div id="graphinfo" class="info">
+                    <ul class="list-group" style="width:auto">
+                        <li class="list-group-item list-group-item-info"><b>Link Name: </b><a href="#" id="linkName"></a></li>
+                        <li class="list-group-item list-group-item-info"><b>Page Size: </b><a href="#" id="size"></a></li>
+                    </ul>
+                </div>
+
+            </li>
+
+        </ul>
+    </div>
+
+    <div id="target" class="container">
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="jumbo" class="jumbotron">
+                            <div>
+                                <p style="float: right;"><img src="images/nz.png" style="width: 200px; height: 150px"></p>
+                            </div>
+                            <h1>New Zealand Internet Map</h1>
+                            <p>The NZ Internet map is a bi-dimensional presentation of links between NZ owned websites.
+                                Every node represents a website and the size is determined by page rank.
+                                The higher the page rank the larger the node. The closer the node the stronger the link of the two nodes.
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div align="center">
+            <div class="btn-group">
+                <a href="index2.html" class="btn btn-primary" role="button"><i class ="icon-police"></i> Police</a>
+                <a href="stuffGraph.html" class="btn btn-primary" role="button"><i class ="icon-news"></i> Stuff</a>
+                <a href="fairfaxGraph.html" class="btn btn-primary" role="button"><i class ="icon-websitealt"></i> Fairfax</a>
+                <a href="RBNZGraph.html"  class="btn btn-success" role="button"><i class ="icon-bank"></i> RBNZ</a>
+                <a href="retailGraph.html"  class="btn btn-primary" role="button"><i class ="icon-shopping"></i> Retail</a>
+                <a href="nzmilGraph.html"  class="btn btn-primary" role="button"><i class ="icon-gun"></i> NZ Mil</a>
+            </div>
+            <div class="btn-group">
+                <a href="#menu-toggle" style="" class="btn btn-primary" id="menu-toggle"><i class="icon-tabletscreensize"></i> Hide/Show Menu</a>
+                <a href="#jumbo-toggle" style="" class="btn btn-primary" id="jumbo-toggle"><i class="icon-tabletscreensize"></i> Hide/Show Info</a>
+            </div>
+        </div>
+
+        <div id="pgrank" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Page Rank</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Refers to the amount of incoming and outgoing links within a website.
+                            The more incoming and outgoing links, the higher the page rank.
+                            The higher the page rank, the larger the node.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modularity" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Modularity</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Refers to the connection between the nodes. The closer the node, the stronger the link
+                            connection.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="topwords" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Top Words</h4>
+                    </div>
+                    <div class="modal-body" id="ajaxDiv">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="about" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span> <img src="images/glyphicons-196-circle-info.png" style="float: left; height: 20px"></span>
+                        <h4 class="modal-title">About</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h2>The NZ Internet Map</h2>
+
+                        <p>The NZ Internet map is a bi-dimensional presenatation of links between NZ owned websites.
+                            Every node represents a website and the size is determined by page rank.
+                            The higher the page rank the larger the node.
+                            The closer the node the stronger the link of the two nodes.</p>
+
+                        <h2>Domains</h2>
+
+                        <p>The buttons represent a certain domain. Each domain will display thier respective graphs.
+                            The scrapped websites are as follows:</p>
+                        <ul>
+                            <li><a href="http://www.police.govt.nz/">Police.govt.nz</a></li>
+                            <li><a href="http://www.stuff.co.nz/">Stuff.co.nz</a></li>
+                            <li><a href="http://www.fairfaxmedia.co.nz/">fairfaxmedia.co.nz</a></li>
+                            <li><a href="http://www.rbnz.govt.nz/">Rbnz.govt.nz</a></li>
+                            <li><a href="http://www.trivago.co.nz/">Trivago.co.nz</a></li>
+                            <li><a href="http://www.retail.org.nz/">Retail.org.nz</a></li>
+                            <li><a href="http://www.nzdf.mil.nz/">NZDF.mil.nz</a></li>
+                        </ul>
+
+                        <h2>Scrape Process</h2>
+
+                        <p>Our scraping method involves using a script that utilises the Scrapy web scraping framework.
+                            Our scraper starts from one URL and then follows all links on that page to other pages and
+                            then repeats the process on each page.
+                            The depth of the scrape is settable within the script and in our case, we set the depth to 5
+                            which is applicable to each individual website.
+                            <br><br>
+                            The scraper retrieves information such as the html body content, html scheme, number of
+                            links on page, URL path, server URL and title of page.
+                            The information is then saved into a CSV. The links are extracted into another CSV and then
+                            the scrape is repeated and checks if the links from the first scrape appear again in the
+                            second scrape,
+                            if not then the link is most likely an advertisement and not relevant, so it is dropped.
+                            All links that appear in both scrapes are saved into another CSV.
+                            <br><br>
+                            Once we have a CSV consisting of confirmed links,
+                            the file is converted into a GDF format which will then be ale to opened in Gephi, our
+                            choice of graphing software.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+
+        <div id="rbnzcontainer" class="dataset"></div>
+
+    </div>
+
+</div>
+
+
+<script src="plugins/sigma.min.js"></script>
+<script src="plugins/sigma.parsers.json.min.js"></script>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="plugins/bootstrap.js"></script>
+<script src="plugins/sigma.plugins.dragNodes.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $("#about").modal('hide');
+    });
+
+
+
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+
+    $("#jumbo-toggle").click(function (e) {
+        e.preventDefault();
+        $("#jumbo" ).toggle();
+    });
+
+
+    function createRequest() {
+        var xhr = false;
+        if (window.XMLHttpRequest) {
+            xhr = new XMLHttpRequest();
+        }
+        else if (window.ActiveXObject) {
+            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        return xhr;
+    } // end function createRequest()
+
+
+    var xhr = createRequest();
+
+    function getData(dataSource, divID) {
+        if (xhr) {
+            var place = document.getElementById(divID);
+            xhr.open("GET", "DBcon.php", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    place.innerHTML = xhr.responseText;
+                } // end if
+            } // end anonymous call-back function
+            xhr.send(null);
+        } // end if
+    } // end function getData()
+
+
+
+    new sigma.parsers.json('json/rbnz2.json', {
+                container: 'rbnzcontainer',
+                settings: {
+                    defaultNodeColor: '#ec5148',
+                    maxNodeSize: 20,
+                    minNodeSize: 1,
+                    drawEdges: false,
+                    defaultLabelColor: "white",
+                    drawLabels: true,
+                    doubleClickEnabled: false
+
+                }
+            },
+
+            function (s) {
+                // This function will be executed when the
+                // graph is displayed, with "s" the related
+                s.graph.nodes().forEach(function (n) {
+                    n.originalColor = n.color;
+                });
+
+                s.graph.edges().forEach(function (e) {
+                    e.originalColor = e.color;
+                });s
+
+
+                // When a node is clicked, we check for each node
+                // if it is a neighbor of the clicked one. If not,
+                // we set its color as grey, and else, it takes its
+                // original color.
+                // We do the same for the edges, and we only keep
+                // edges that have both extremities colored.
+
+                s.bind('clickNode', function (e) {
+                    var url = e.data.node.label;
+                    var pageSize = e.data.node.size;
+                    var x = e.data.node.source;
+                    var words = e.data.node.words;
+                    document.getElementById("linkName").innerHTML = url;
+                    document.getElementById("size").innerHTML = pageSize;
+                    document.getElementById("words").innerHTML = words;
+
+
+
+
+
+                    // Since the data has been modified, we need to
+                    // call the refresh method to make the colors
+                    // update effective.
+                    s.refresh();
+                });
+
+
+                // When the stage is clicked, we just color each
+                // node and edge with its original color.
+                s.bind('doubleClickNode', function (e) {
+                    var url = e.data.node.id;
+                    window.location.href = 'http://' + url, '_blank';
+
+                    // Same as in the previous event:
+                    s.refresh();
+                });
+
+            }
+    );
+
+
+
+</script>
+
+</body>
+</html>

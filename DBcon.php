@@ -11,28 +11,37 @@ $username = 'root';
 $password = '';
 $dbname = 'top100';
 
-$conn = new mysqli($servername,$username,$password,$dbname);
-if(!$conn)
-{
-    die("Connection failed: ".mysqli_connect_error());
+$dom = new DOMDocument();
+$dom->validateOnParse = true;
+$dom->loadHTML(file_get_contents("stuffGraph.html"));
+$name = $dom->getElementById("linkName")->nodeValue;
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
 }
 
 
-$query = "SELECT * FROM wordbase WHERE SNAME='archway.archives.govt.nz'";
-$result = mysqli_query($conn,$query);
 
-if(mysqli_num_rows($result)>0){
-    while ($row = mysqli_fetch_assoc($result)){
-        $words = $row['TOPWORDS'];
+
+$query = "SELECT * FROM stufftable";
+$result = mysqli_query($conn, $query);
+
+
+if (mysqli_num_rows($result) > 0) {
+
+
+    while ($row = mysqli_fetch_array($result)) {
         $sname = $row['SNAME'];
-
-        echo "<table class='table table-striped'>";
+        $words = $row['TOPWORDS'];
+        echo "<table class='table table-bordered'>";
         echo "<thead>";
         echo "<tr>";
         echo "<th>Server Name</th>";
         echo "<th> Top Words</th>";
         echo "</tr>";
         echo "</thead>";
+
 
         echo "<tbody>";
         echo "<tr>";
@@ -41,11 +50,15 @@ if(mysqli_num_rows($result)>0){
         echo "</tr>";
         echo "</tbody>";
         echo "</table>";
+
+       echo $row;
     }
+
 
 } else {
     echo "No Words found";
 }
+
 
 mysqli_close($conn);
 ?>

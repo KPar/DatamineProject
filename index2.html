@@ -2,48 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>NZ Internet Map</title>
+    <title>The New Zealand Internet Map</title>
     <style>
-        #policecontainer, #stuffcontainer, #fairfaxcontainer, #rbnzcontainer, #trivagocontainer, #retailcontainer, #nzmilcontainer {
-            max-width: 80%;
-            height: 500px;
+        #policecontainer {
+            max-width: 100%;
+            height: 900px;
             margin: auto;
             background-color: #333333;
-
         }
 
-        .contextmenu {
-            display: none;
-            z-index: 1000;
-            position: absolute;
-            overflow: hidden;
-            border: 1px solid #CCC;
-            white-space: nowrap;
-            font-family: sans-serif;
-            background: #FFF;
-            color: #333;
-            border-radius: 5px;
-        }
 
-        .contextmenu li {
-            padding: 8px 12px;
-            cursor: pointer;
-        }
-
-        .contextmenu li:hover {
-            background-color: #DEF;
-        }
 
         body {
-            background-image: url("stardust.png");
+            background-image: url("images/stardust.png");
         }
     </style>
 </head>
+
 <link rel="stylesheet" href="plugins/bootstrap-theme.css">
 <link rel="stylesheet" href="plugins/bootstrap.css">
 <link rel="stylesheet" href="plugins/bootstrap-theme.min.css">
 <link rel="stylesheet" href="plugins/bootstrap.min.css">
 <link rel="stylesheet" href="plugins/simple-sidebar.css">
+<link rel="stylesheet" href="plugins/whhg-font/css/whhg.css">
 <body style=" max-width: 100%; max-height: 100%">
 
 
@@ -52,48 +33,79 @@
     <!-- Sidebar -->
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
-            <img src="2000px-Aut_logo_tran.svg.png"
+            <img src="images/2015-10-29.png"
                  style="height: 100px; width: 200px; margin-left: auto; margin-right: auto; display: block">
             <li class="sidebar-brand">
-                <a href="index2.html"><h1>Home</h1></a>
+                <a href="index2.html"><i class="icon-home" style="float: left;"></i>Home</a>
             </li>
             <li>
-                <a href="#" data-toggle="modal" data-target="#about">About</a>
+                <a href="#" data-toggle="modal" data-target="#about"><i class="icon-info-sign" style="float: left"></i> About</a>
             </li>
             <li>
-                <a href="#" data-toggle="modal" data-target="#topwords" onclick="getData('DBcon.php','ajaxDiv')">Top Words</a>
-            </li>
-            <li>
-                <a href="#" data-target="#polprop">Graph Properties</a>
+                <a href="#" data-toggle="modal" data-target="#topwords"><i class="icon-numberlist" style="float: left"></i> Top Words</a>
+                <p id="words" class="list-group-item list-group-item-info">
 
-                <div id="prop">
+                </p>
+            </li>
+            <li>
+                <a href="#" data-toggle="collapse" data-target="#polprop"><i class="icon-details" style="float: left"></i> Graph Properties</a>
 
+                <ul id="polprop" class="list-group" style="width:auto">
+                    <li class="list-group-item list-group-item-info"><b>Starting Point: </b><a href="http://www.police.govt.nz/" style="color: black">Police.govt.nz</a></li>
+                    <li class="list-group-item list-group-item-info"><b>Total Node Count: </b><a href="#" style="color: black"> 10,671</a></li>
+                    <li class="list-group-item list-group-item-info"><b>Node Size Definition: </b> <a href="#" data-toggle="modal" data-target="#pgrank" style="color: black">Page Rank</a></li>
+                    <li class="list-group-item list-group-item-info"><b>Node Color Definition:</b> <a href="#" data-toggle="modal" data-target="#modularity" style="color: black"> Modularity</a></li>
+                    <li class="list-group-item list-group-item-info"><b>Highest Page Rank:</b> <a href="https://www.govt.nz/" style="color: black">NZ.govt.nz</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#" data-toggle="collapse" data-target="#graphinfo"><i class="icon-details" style="float: left"></i>Node Properties</a>
+                <div id="graphinfo" class="info">
+                    <ul class="list-group" style="width:auto">
+                        <li class="list-group-item list-group-item-info"><b>Link Name: </b><a style="color: black" href="#" id="linkName"></a></li>
+                        <li class="list-group-item list-group-item-info"><b>Page Size: </b><a style="color: black" href="#" id="size"></a></li>
+                    </ul>
                 </div>
             </li>
+
         </ul>
     </div>
 
     <div id="target" class="container">
-        <h1 style="color: #337ab7">NZ Internet Map</h1>
-        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Menu</a>
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="jumbo" class="jumbotron">
+                            <div>
+                                <p style="float: right;"><img src="images/nz.png" style="width: 200px; height: 150px"></p>
+                            </div>
+                            <h1>New Zealand Internet Map</h1>
+                            <p>The NZ Internet map is a bi-dimensional presentation of links between NZ owned websites.
+                                Every node represents a website and the size is determined by page rank.
+                                The higher the page rank the larger the node. The closer the node the stronger the link of the two nodes.
+                            </p>
 
-        <h2 style="text-align: center; color: #337ab7; text-decoration: underline"><span>Select Domain</span></h2>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div align="center">
             <div class="btn-group">
-                <button id="btn-police" data-target="policecontainer" name="toggler" class="btn btn-primary ">Police
-                </button>
-                <button id="btn-stuff" data-target="stuffcontainer" name="toggler" class="btn btn-primary">Stuff
-                </button>
-                <button id="btn-fairfax" data-target="fairfaxcontainer" name="toggler" class="btn btn-primary">Fairfax
-                </button>
-                <button id="btn-rbnz" data-target="rbnzcontainer" name="toggler" class="btn btn-primary">RBNZ</button>
-                <button id="btn-trivago" data-target="trivagocontainer" name="toggler" class="btn btn-primary">Trivago
-                </button>
-                <button id="btn-retail" data-target="retailcontainer" name="toggler" class="btn btn-primary">Retail
-                </button>
-                <button id="btn-nzmil" data-target="nzmilcontainer" name="toggler" class="btn btn-primary">NZ Mil
-                </button>
+                <a href="index2.html" class="btn btn-success" role="button"><i class ="icon-police"></i> Police</a>
+                <a href="stuffGraph.html" class="btn btn-primary" role="button"><i class ="icon-news"></i> Stuff</a>
+                <a href="fairfaxGraph.html" class="btn btn-primary" role="button"><i class ="icon-websitealt"></i> Fairfax</a>
+                <a href="RBNZGraph.html"  class="btn btn-primary" role="button"><i class ="icon-bank"></i> RBNZ</a>
+                <a href="retailGraph.html"  class="btn btn-primary" role="button"><i class ="icon-shopping"></i> Retail</a>
+                <a href="nzmilGraph.html"  class="btn btn-primary" role="button"><i class ="icon-gun"></i> NZ Mil</a>
+            </div>
+            <div class="btn-group">
+                <a href="#menu-toggle" style="" class="btn btn-primary" id="menu-toggle"><i class="icon-tabletscreensize"></i> Hide/Show Menu</a>
+                <a href="#jumbo-toggle" style="" class="btn btn-primary" id="jumbo-toggle"><i class="icon-tabletscreensize"></i> Hide/Show Info</a>
             </div>
         </div>
 
@@ -156,6 +168,7 @@
 
                 <div class="modal-content">
                     <div class="modal-header">
+                        <span> <img src="images/glyphicons-196-circle-info.png" style="float: left; height: 20px"></span>
                         <h4 class="modal-title">About</h4>
                     </div>
                     <div class="modal-body">
@@ -182,7 +195,23 @@
 
                         <h2>Scrape Process</h2>
 
-                        <p>Write something here Luke</p>
+                        <p>Our scraping method involves using a script that utilises the Scrapy web scraping framework.
+                            Our scraper starts from one URL and then follows all links on that page to other pages and
+                            then repeats the process on each page.
+                            The depth of the scrape is settable within the script and in our case, we set the depth to 5
+                            which is applicable to each individual website.
+                            <br><br>
+                            The scraper retrieves information such as the html body content, html scheme, number of
+                            links on page, URL path, server URL and title of page.
+                            The information is then saved into a CSV. The links are extracted into another CSV and then
+                            the scrape is repeated and checks if the links from the first scrape appear again in the
+                            second scrape,
+                            if not then the link is most likely an advertisement and not relevant, so it is dropped.
+                            All links that appear in both scrapes are saved into another CSV.
+                            <br><br>
+                            Once we have a CSV consisting of confirmed links,
+                            the file is converted into a GDF format which will then be ale to opened in Gephi, our
+                            choice of graphing software.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -194,13 +223,8 @@
         <br>
 
 
-        <div id="policecontainer" class="dataset"></div>
-        <div id="stuffcontainer" class="dataset"></div>
-        <div id="fairfaxcontainer" class="dataset"></div>
-        <div id="rbnzcontainer" class="dataset"></div>
-        <div id="trivagocontainer" class="dataset"></div>
-        <div id="retailcontainer" class="dataset"></div>
-        <div id="nzmilcontainer" class="dataset"></div>
+        <div id="policecontainer" class="dataset">
+        </div>
 
 
 
@@ -213,71 +237,24 @@
 <script src="plugins/sigma.parsers.json.min.js"></script>
 <script src="js/jquery-1.11.3.min.js"></script>
 <script src="plugins/bootstrap.js"></script>
-<script src="ajax.js"></script>
-<script src="xhr.js"></script>
+<script src="plugins/sigma.plugins.dragNodes.js"></script>
 <script>
 
     $(document).ready(function () {
-        $("#about").modal('show');
-    });
-
-    $(document).ready(function () {
-        $('.dataset').show();
-        $('.btn-group button').click(function () {
-            var target = "#" + $(this).data("target");
-            $(".dataset").not(target).hide();
-            $(target).show();
-        });
-    });
-
-    $(document).ready(function () {
-        $("#btn-police").click(function () {
-            $('#prop').load("content.html #policeinfo ").show();
-        });
-    });
-
-    $(document).ready(function () {
-        $("#btn-stuff").click(function () {
-            $('#prop').load("content.html #stuffinfo ").show();
-        });
-    });
-
-
-    $(document).ready(function () {
-        $("#btn-fairfax").click(function () {
-            $('#prop').load("content.html #fairfaxinfo ").show();
-        });
-    });
-
-    $(document).ready(function () {
-        $("#btn-rbnz").click(function () {
-            $('#prop').load("content.html #rbnzinfo").show();
-        });
-    });
-
-    $(document).ready(function () {
-        $("#btn-trivago").click(function () {
-            $('#prop').load("content.html #trivagoinfo").show();
-        });
-    });
-
-    $(document).ready(function () {
-        $("#btn-retail").click(function () {
-            $('#prop').load("content.html #retailinfo").show();
-        });
-    });
-
-    $(document).ready(function () {
-        $("#btn-nzmil").click(function () {
-            $('#prop').load("content.html #nzmilinfo").show();
-        });
+        $("#about").modal('hide');
     });
 
 
     $("#menu-toggle").click(function (e) {
         e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
+        $("#wrapper" ).toggleClass("toggled");
     });
+
+    $("#jumbo-toggle").click(function (e) {
+        e.preventDefault();
+        $("#jumbo" ).toggle();
+    });
+
 
 
     function createRequest() {
@@ -308,18 +285,6 @@
     } // end function getData()
 
 
-    sigma.classes.graph.addMethod('neighbors', function (nodeId) {
-
-        var k,
-                neighbors = {},
-                index = this.allNeighborsIndex[nodeId] || {};
-
-        for (k in index)
-            neighbors[k] = this.nodesIndex[k];
-
-        return neighbors;
-    });
-
 
     var police = sigma.parsers.json('json/police_stripped.json', {
                 container: 'policecontainer',
@@ -329,7 +294,8 @@
                     drawEdges: false,
                     labelSize: 'proportional',
                     defaultLabelColor: "white",
-                    drawLabels: true
+                    drawLabels: true,
+                    doubleClickEnabled: false
                 }
             },
 
@@ -353,8 +319,14 @@
 
                 s.bind('clickNode', function (e) {
 
-                    var url = e.data.node.id;
-                    window.location.href = 'http://' + url, '_blank';
+                    var url = e.data.node.label;
+                    var pageSize = e.data.node.size;
+                    var x = e.data.node.source;
+                    var words = e.data.node.words;
+                    document.getElementById("linkName").innerHTML = url;
+                    document.getElementById("size").innerHTML = pageSize;
+                    document.getElementById("words").innerHTML = words;
+
 
                     // Since the data has been modified, we need to
                     // call the refresh method to make the colors
@@ -378,367 +350,21 @@
                     s.refresh();
                 });
 
-            }
-    );
-
-    var x = sigma.parsers.json('json/stuff5.json', {
-                container: 'stuffcontainer',
-                settings: {
-                    defaultNodeColor: '#ec5148',
-                    maxNodeSize: 20,
-                    minNodeSize: 1,
-                    drawEdges: false,
-                    labelSize: "proportional",
-                    defaultLabelColor: "white",
-                    drawLabels: true
-                }
-            },
-
-
-            function (s) {
-                // This function will be executed when the
-                // graph is displayed, with "s" the related
-                s.graph.nodes().forEach(function (n) {
-                    n.originalColor = n.color;
-                });
-                s.graph.edges().forEach(function (e) {
-                    e.originalColor = e.color;
-                });
-
-
-                // When a node is clicked, we check for each node
-                // if it is a neighbor of the clicked one. If not,
-                // we set its color as grey, and else, it takes its
-                // original color.
-                // We do the same for the edges, and we only keep
-                // edges that have both extremities colored.
-                s.bind('clickNode', function (e) {
+                s.bind('doubleClickNode', function (e) {
                     var url = e.data.node.id;
                     window.location.href = 'http://' + url, '_blank';
-
-                    // Since the data has been modified, we need to
-                    // call the refresh method to make the colors
-                    // update effective.
-                    s.refresh();
-                });
-
-
-                // When the stage is clicked, we just color each
-                // node and edge with its original color.
-                s.bind('clickStage', function (e) {
-                    s.graph.nodes().forEach(function (n) {
-                        n.color = n.originalColor;
-                    });
-
-                    s.graph.edges().forEach(function (e) {
-                        e.color = e.originalColor;
-                    });
-
 
                     // Same as in the previous event:
                     s.refresh();
                 });
 
             }
+
+
+
+
     );
 
-    sigma.parsers.json('json/fairfax.json', {
-                container: 'fairfaxcontainer',
-                settings: {
-                    defaultNodeColor: '#ec5148',
-                    maxNodeSize: 20,
-                    drawEdges: false,
-                    labelSize: 'proportional',
-                    defaultLabelColor: "white"
-                }
-            },
-
-
-            function (s) {
-                // This function will be executed when the
-                // graph is displayed, with "s" the related
-                s.graph.nodes().forEach(function (n) {
-                    n.originalColor = n.color;
-                });
-                s.graph.edges().forEach(function (e) {
-                    e.originalColor = e.color;
-                });
-
-
-                // When a node is clicked, we check for each node
-                // if it is a neighbor of the clicked one. If not,
-                // we set its color as grey, and else, it takes its
-                // original color.
-                // We do the same for the edges, and we only keep
-                // edges that have both extremities colored.
-                s.bind('clickNode', function (e) {
-
-                    var url = e.data.node.id;
-                    window.location.href = 'http://' + url, '_blank';
-
-                    // Since the data has been modified, we need to
-                    // call the refresh method to make the colors
-                    // update effective.
-                    s.refresh();
-
-                });
-
-                // When the stage is clicked, we just color each
-                // node and edge with its original color.
-                s.bind('clickStage', function (e) {
-                    s.graph.nodes().forEach(function (n) {
-                        n.color = n.originalColor;
-                    });
-
-                    s.graph.edges().forEach(function (e) {
-                        e.color = e.originalColor;
-                    });
-
-                    // Same as in the previous event:
-                    s.refresh();
-                });
-            }
-    );
-
-    sigma.parsers.json('json/rbnz2.json', {
-                container: 'rbnzcontainer',
-                settings: {
-                    defaultNodeColor: '#ec5148',
-                    minNodeSize: 1,
-                    maxNodeSize: 20,
-                    drawEdges: false,
-                    labelSize: 'proportional',
-                    defaultLabelColor: "white"
-                }
-            },
-
-
-            function (s) {
-                // This function will be executed when the
-                // graph is displayed, with "s" the related
-                s.graph.nodes().forEach(function (n) {
-                    n.originalColor = n.color;
-                });
-                s.graph.edges().forEach(function (e) {
-                    e.originalColor = e.color;
-                });
-
-
-                // When a node is clicked, we check for each node
-                // if it is a neighbor of the clicked one. If not,
-                // we set its color as grey, and else, it takes its
-                // original color.
-                // We do the same for the edges, and we only keep
-                // edges that have both extremities colored.
-                s.bind('clickNode', function (e) {
-
-                    var url = e.data.node.id;
-                    window.location.href = 'http://' + url, '_blank';
-
-                    // Since the data has been modified, we need to
-                    // call the refresh method to make the colors
-                    // update effective.
-                    s.refresh();
-
-                });
-
-
-                // When the stage is clicked, we just color each
-                // node and edge with its original color.
-                s.bind('clickStage', function (e) {
-                    s.graph.nodes().forEach(function (n) {
-                        n.color = n.originalColor;
-                    });
-
-                    s.graph.edges().forEach(function (e) {
-                        e.color = e.originalColor;
-                    });
-
-                    // Same as in the previous event:
-                    s.refresh();
-                });
-            }
-    );
-
-
-    sigma.parsers.json('json/trivago2.json', {
-                container: 'trivagocontainer',
-                settings: {
-                    defaultNodeColor: '#ec5148',
-                    minNodeSize: 5,
-                    maxNodeSize: 25,
-                    drawEdges: false,
-                    labelSize: 'proportional',
-                    defaultLabelColor: "white"
-                }
-            },
-
-
-            function (s) {
-                // This function will be executed when the
-                // graph is displayed, with "s" the related
-                s.graph.nodes().forEach(function (n) {
-                    n.originalColor = n.color;
-                });
-                s.graph.edges().forEach(function (e) {
-                    e.originalColor = e.color;
-                });
-
-
-                // When a node is clicked, we check for each node
-                // if it is a neighbor of the clicked one. If not,
-                // we set its color as grey, and else, it takes its
-                // original color.
-                // We do the same for the edges, and we only keep
-                // edges that have both extremities colored.
-                s.bind('clickNode', function (e) {
-
-                    var url = e.data.node.id;
-                    window.location.href = 'http://' + url, '_blank';
-
-                    // Since the data has been modified, we need to
-                    // call the refresh method to make the colors
-                    // update effective.
-                    s.refresh();
-                });
-
-
-                // When the stage is clicked, we just color each
-                // node and edge with its original color.
-                s.bind('clickStage', function (e) {
-                    s.graph.nodes().forEach(function (n) {
-                        n.color = n.originalColor;
-                    });
-
-                    s.graph.edges().forEach(function (e) {
-                        e.color = e.originalColor;
-                    });
-
-                    // Same as in the previous event:
-                    s.refresh();
-                });
-            }
-    );
-
-
-    sigma.parsers.json('json/retail.json', {
-                container: 'retailcontainer',
-                settings: {
-                    defaultNodeColor: '#ec5148',
-                    minNodeSize: 1,
-                    maxNodeSize: 20,
-                    drawEdges: false,
-                    labelSize: 'proportional',
-                    defaultLabelColor: "white"
-                }
-            },
-
-
-            function (s) {
-                // This function will be executed when the
-                // graph is displayed, with "s" the related
-                s.graph.nodes().forEach(function (n) {
-                    n.originalColor = n.color;
-                });
-                s.graph.edges().forEach(function (e) {
-                    e.originalColor = e.color;
-                });
-
-
-                // When a node is clicked, we check for each node
-                // if it is a neighbor of the clicked one. If not,
-                // we set its color as grey, and else, it takes its
-                // original color.
-                // We do the same for the edges, and we only keep
-                // edges that have both extremities colored.
-                s.bind('clickNode', function (e) {
-
-                    var url = e.data.node.id;
-                    window.location.href = 'http://' + url, '_blank';
-
-                    // Since the data has been modified, we need to
-                    // call the refresh method to make the colors
-                    // update effective.
-                    s.refresh();
-
-                });
-
-
-                // When the stage is clicked, we just color each
-                // node and edge with its original color.
-                s.bind('clickStage', function (e) {
-                    s.graph.nodes().forEach(function (n) {
-                        n.color = n.originalColor;
-                    });
-
-                    s.graph.edges().forEach(function (e) {
-                        e.color = e.originalColor;
-                    });
-
-                    // Same as in the previous event:
-                    s.refresh();
-                });
-            }
-    );
-
-    sigma.parsers.json('json/nzmil.json', {
-                container: 'nzmilcontainer',
-                settings: {
-                    defaultNodeColor: '#ec5148',
-                    minNodeSize: 1,
-                    maxNodeSize: 20,
-                    drawEdges: false,
-                    labelSize: 'proportional',
-                    defaultLabelColor: "white"
-                }
-            },
-
-
-            function (s) {
-                // This function will be executed when the
-                // graph is displayed, with "s" the related
-                s.graph.nodes().forEach(function (n) {
-                    n.originalColor = n.color;
-                });
-                s.graph.edges().forEach(function (e) {
-                    e.originalColor = e.color;
-                });
-
-
-                // When a node is clicked, we check for each node
-                // if it is a neighbor of the clicked one. If not,
-                // we set its color as grey, and else, it takes its
-                // original color.
-                // We do the same for the edges, and we only keep
-                // edges that have both extremities colored.
-                s.bind('clickNode', function (e) {
-
-                    var url = e.data.node.id;
-                    window.location.href = 'http://' + url, '_blank';
-
-                    // Since the data has been modified, we need to
-                    // call the refresh method to make the colors
-                    // update effective.
-                    s.refresh();
-                });
-
-
-                // When the stage is clicked, we just color each
-                // node and edge with its original color.
-                s.bind('clickStage', function (e) {
-                    s.graph.nodes().forEach(function (n) {
-                        n.color = n.originalColor;
-                    });
-
-                    s.graph.edges().forEach(function (e) {
-                        e.color = e.originalColor;
-                    });
-
-                    // Same as in the previous event:
-                    s.refresh();
-                });
-            }
-    );
 
 
 </script>
